@@ -1,0 +1,23 @@
+个人效率计算｜固定签名说明
+
+版本：V1.1.6
+包名：com.example.efficiencytracker
+
+固定签名文件：
+keystore/efficiencytracker-release.jks
+
+签名别名：
+efficiencytracker
+
+签名密码：
+efficiency2026
+
+SHA-256：
+51:F7:6B:2F:6F:4E:F3:93:11:37:89:10:C9:64:D4:49:7D:BB:DA:6B:FA:B8:71:1B:07:B6:CC:7E:DF:0A:B0:12
+
+重要：
+1. 从 V1.1.6 开始，后续版本必须一直使用这套 keystore。
+2. 第一次从旧版切换到这套新签名时，如果提示“签名冲突”，必须先卸载旧版再安装 V1.1.6；Android 无法在没有旧私钥的情况下把新 APK 伪装成旧签名。
+3. 卸载前请先备份 App 内重要数据。
+4. 不要公开发布 keystore 或 signing.properties。尤其不要把它们提交到公开 GitHub/Gitee 仓库。
+5. 如果以后换电脑，直接复制这两个文件即可继续使用同一签名。

@@ -1,0 +1,54 @@
+plugins { id 'com.android.application' }
+
+// 固定签名：从 v1.1.5 开始所有本项目 APK 使用同一个签名证书，
+// 后续只要保留 signing.properties + keystore/efficiencytracker-release.jks，
+// 就可以继续覆盖安装 v1.1.6、v1.1.7……
+def signingPropertiesFile = rootProject.file('signing.properties')
+def signingProperties = new Properties()
+if (signingPropertiesFile.exists()) {
+    signingPropertiesFile.withInputStream { signingProperties.load(it) }
+}
+
+def fixedSigningReady = signingPropertiesFile.exists() &&
+        signingProperties.getProperty('storeFile') &&
+        rootProject.file(signingProperties.getProperty('storeFile')).exists()
+
+android {
+    namespace 'com.example.efficiencytracker'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'com.example.efficiencytracker'
+        minSdk 24
+        targetSdk 36
+        versionCode 10
+        versionName '1.1.9'
+    }
+
+    if (fixedSigningReady) {
+        signingConfigs {
+            fixed {
+                storeFile rootProject.file(signingProperties.getProperty('storeFile'))
+                storePassword signingProperties.getProperty('storePassword')
+                keyAlias signingProperties.getProperty('keyAlias')
+                keyPassword signingProperties.getProperty('keyPassword')
+            }
+        }
+        buildTypes {
+            debug {
+                signingConfig signingConfigs.fixed
+            }
+            release {
+                signingConfig signingConfigs.fixed
+                minifyEnabled false
+                proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            }
+        }
+    } else {
+        buildTypes {
+            release {
+                minifyEnabled false
+                proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            }
+        }
+    }
+}
